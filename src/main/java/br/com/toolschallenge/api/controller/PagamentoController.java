@@ -2,6 +2,8 @@ package br.com.toolschallenge.api.controller;
 
 import br.com.toolschallenge.api.dto.request.PagamentoRequestDTO;
 import br.com.toolschallenge.api.dto.response.PagamentoResponseDTO;
+import br.com.toolschallenge.config.modelmapper.MapperConvert;
+import br.com.toolschallenge.domain.model.Transacao;
 import br.com.toolschallenge.domain.service.TransacaoService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,6 +23,7 @@ import java.util.List;
 public class PagamentoController {
 
     private final TransacaoService transacaoService;
+    private final MapperConvert mapperConvert;
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Pagamento realizado com sucesso."),
@@ -34,15 +37,15 @@ public class PagamentoController {
     }
 
 
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Estorno Realizado com sucesso."),
-//            @ApiResponse(responseCode = "400", description = "Requisição inválida.")
-//    })
-//    @PutMapping(value = "/estorno/{id}" , produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Transacao> realizarEstorno(@PathVariable String id, @RequestBody PagamentoRequestDTO pagamentoRequestDTO) {
-//
-//        return ResponseEntity.ok().body(transacao);
-//    }
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Estorno Realizado com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida.")
+    })
+    @PatchMapping(value = "/estorno/{id}" , produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PagamentoResponseDTO> realizarEstorno(@PathVariable Long id) {
+        PagamentoResponseDTO pagamentoResponseDTO = transacaoService.realizarEstorno(id);
+        return ResponseEntity.ok().body(pagamentoResponseDTO);
+    }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Transações encontradas com sucesso."),
@@ -63,9 +66,9 @@ public class PagamentoController {
     })
     @GetMapping(value = "/pesquisar/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PagamentoResponseDTO> pesquisarPorId(@PathVariable Long id, HttpServletRequest request) {
-       PagamentoResponseDTO pagamentoResponseDTO = transacaoService.pesquisarPorId(id);
-
-        return ResponseEntity.ok().body(pagamentoResponseDTO);
+        Transacao transacao = transacaoService.pesquisarPorId(id);
+        PagamentoResponseDTO pagamentoDTO = mapperConvert.mapEntityToDto(transacao, PagamentoResponseDTO.class);
+        return ResponseEntity.ok().body(pagamentoDTO);
     }
 
 }

@@ -14,6 +14,7 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String cartao;
 
     @Embedded
