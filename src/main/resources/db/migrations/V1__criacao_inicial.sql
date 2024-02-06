@@ -6,7 +6,7 @@ CREATE TABLE `saldo_cartao`(
 
 CREATE TABLE `transacao` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `cartao` varchar(255) DEFAULT NULL,
+  `cartao` varchar(16) DEFAULT NULL,
   `codigo_autorizacao` varchar(255) DEFAULT NULL,
   `data_hora` datetime(6) DEFAULT NULL,
   `estabelecimento` varchar(255) DEFAULT NULL,

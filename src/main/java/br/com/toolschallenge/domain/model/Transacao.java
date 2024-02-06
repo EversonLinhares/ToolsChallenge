@@ -1,6 +1,7 @@
 package br.com.toolschallenge.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
@@ -15,6 +16,7 @@ public class Transacao {
     private Long id;
 
     @Column
+    @Size(max = 16)
     private String cartao;
 
     @Embedded
